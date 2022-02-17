@@ -107,37 +107,23 @@ struct custom_hash
 template <class T, class H> using umap=unordered_map<T,H,custom_hash>;
 template <class T> using uset=unordered_set<T,custom_hash>;
 
-vll distinct;
-
-void preCompute()
-{
-	for (ll i=0;i<N;i++)
-	{
-		ll sum=i*(i+1)/2;
-		distinct.pb(sum);
-	}
-}
-
 void solve()
 {
 	ll n,k; cin>>n>>k;
-	if (k==n)
+	ll total=n*(n+1)/2;
+	ll extra=total-k;
+	vll v(n);
+	for (ll i=0;i<n;i++) v[i]=i+1;
+	for (ll i=1;i<n;i++)
 	{
-		for (ll i=0;i<n;i++) cout<<1<<" ";
-		return;
+		ll d=n-i;
+		if (d<=extra)
+		{
+			extra-=d;
+			v[i]=1;
+		}
 	}
-	ll extra=k-n;
-	ll pos=upper_bound(all(distinct),extra)-distinct.begin()-1;
-	vll ans;
-	for (ll i=1;i<=pos+1;i++) ans.pb(i);
-	extra-=distinct[pos];
-	if (extra)
-	{
-		ll elem=ans.back()-extra;
-		ans.pb(elem);
-	}
-	while (ans.size()<n) ans.pb(ans.back());
-	cout<<ans;
+	cout<<v;
 }
 
 int main()
